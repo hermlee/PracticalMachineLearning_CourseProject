@@ -51,10 +51,12 @@ if (length(row_na>0)) {
 }
 ```
 ### Data Partition
+```
 set.seed(1989)
 intrain <- createDataPartition (trData$classe,p=0.7,list=FALSE)
 data_train <- trData[intrain,]
 data_test <- trData[-intrain,]
+```
 ### Cross Validation
 In this project we applied the 5-fold cross validation.
 ```
@@ -91,4 +93,4 @@ The tree
 ```
 fancyRpartPlot(mod_rpart$finalModel)
 ```
-!(/rpart.png)!
+!(/rpart.png)
