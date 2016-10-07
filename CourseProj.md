@@ -6,13 +6,13 @@ Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible t
 ## Data Processing
 ### Import the Data
 When importing the data, "NA", "#DIV/0!", and "" are recognized as missing values.
-'''
+```
 trData <- read.csv(paste(directory,'/pml-training.csv',sep=''),na.strings=c("NA","#DIV/0!",""))
 tsData <- read.csv(paste(directory,'/pml-testing.csv',sep=''),na.strings=c("NA","#DIV/0!",""))
-'''
+```
 ### Data Cleaning
 We first delect the columns with too many missing values. Here we set the threshold to be 80%. In other words, if a column contains more than 80% of missing values, this column is deleted.
-'''
+```
 N_row <- nrow(trData)
 N_col <- ncol(tsData)
 threshold <- 0.8
@@ -26,8 +26,9 @@ if (length(col_na)>0) {
 	trData <- trData[,-col_na]
 	tsData <- tsData[,-col_na]
 }
-'''
+```
 Then, delete the rows with missing data:
+```
 row_na <- NULL
 for (i in N_row) {
 	if (sum(is.na(trData[i,]))>0){
@@ -37,3 +38,4 @@ for (i in N_row) {
 if (length(row_na>0)) {
 	trData <- trData[-row_na,]
 }
+```
