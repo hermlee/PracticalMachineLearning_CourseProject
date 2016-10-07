@@ -3,6 +3,12 @@
 #### _**October 7, 2016**_ 
 ## Background Information 
 Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement and a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways.
+## Libraries
+In this project, we applied _**caret**_ and _**rattle**_ libraries.
+```
+library(caret)
+library(rattle)
+```
 ## Data Processing
 ### Import the Data
 When importing the data, "NA", "#DIV/0!", and "" are recognized as missing values.
@@ -14,7 +20,7 @@ tsData <- read.csv(paste(directory,'/pml-testing.csv',sep=''),na.strings=c("NA",
 We first delect the columns with too many missing values. Here we set the threshold to be 80%. In other words, if a column contains more than 80% of missing values, this column is deleted.
 ```
 N_row <- nrow(trData)
-N_col <- ncol(tsData)
+N_col <- ncol(trData)
 threshold <- 0.8
 col_na <- NULL
 for (i in 1:N_col) {
@@ -27,7 +33,12 @@ if (length(col_na)>0) {
 	tsData <- tsData[,-col_na]
 }
 ```
-Then, delete the rows with missing data:
+After the column deletion, the number of columns is reduced from 159 to 59. Also we need to remove the first column. 
+```
+trData <- trData[,c(-1)]
+tsData <- tsData[,c(-1)]
+```
+Now, delete the rows with missing data from the training data:
 ```
 row_na <- NULL
 for (i in N_row) {
@@ -39,3 +50,45 @@ if (length(row_na>0)) {
 	trData <- trData[-row_na,]
 }
 ```
+### Data Partition
+set.seed(1989)
+intrain <- createDataPartition (trData$classe,p=0.7,list=FALSE)
+data_train <- trData[intrain,]
+data_test <- trData[-intrain,]
+### Cross Validation
+In this project we applied the 5-fold cross validation.
+```
+ctrl <- trainControl(method='cv',num = 5)
+```
+## Prediction Models
+In this project we apply three different methods to do the predition. They are: classification tree, random forest, and support vector machine (SVM). 
+### Classification Tree
+```
+mod_rpart <- train(classe ~ ., data=data_train, method="rpart", trControl=ctrl)
+```
+The results are as follows:
+```
+## CART 
+##
+## 13737 samples
+##    58 predictor
+##     5 classes: 'A', 'B', 'C', 'D', 'E' 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (5 fold) 
+## Summary of sample sizes: 10990, 10988, 10989, 10991, 10990 
+## Resampling results across tuning parameters:
+## 
+##   cp          Accuracy   Kappa     
+##   0.03529651  0.6264026  0.52894558
+##   0.03617808  0.5068104  0.34807944
+##   0.11341674  0.3310836  0.07136299
+
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was cp = 0.03529651. 
+```
+The tree
+```
+fancyRpartPlot(mod_rpart$finalModel)
+```
+!(/rpart.png)!

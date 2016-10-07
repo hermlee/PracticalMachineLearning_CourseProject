@@ -2,6 +2,10 @@
 library(caret)
 
 ## load the data
+directory <- 'C:/Users/Herm Lee/Box Sync/Cousera Courses/Data Science/Practical Machine Learning/Course Project/'
+trData <- read.csv(paste(directory,'/pml-training.csv',sep=''),na.strings=c("NA","#DIV/0!",""))
+tsData <- read.csv(paste(directory,'/pml-testing.csv',sep=''),na.strings=c("NA","#DIV/0!",""))
+
 ## partition training data set into two data sets, 70% for training and 30% for testing
 set.seed(1989)
 intrain <- createDataPartition (trData$classe,p=0.7,list=FALSE)
