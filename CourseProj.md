@@ -34,10 +34,10 @@ if (length(col_na)>0) {
 	tsData <- tsData[,-col_na]
 }
 ```
-After the column deletion, the number of columns is reduced from 159 to 59. Also we need to remove the first column. 
+After the column deletion, the number of columns is reduced from 159 to 59. Also, we need to remove the 1st, 3rd, 4th, 5th, and 6th columns, which are irrelevant to classe. 
 ```
-trData <- trData[,c(-1)]
-tsData <- tsData[,c(-1)]
+trData <- trData[,-c(1,3,4,5,6)]
+tsData <- tsData[,-c(1,3,4,5,6)]
 ```
 Now, delete the rows with missing data from the training data:
 ```
@@ -105,35 +105,35 @@ conf_rpart <- confusionMatrix(data_test$classe,pred_rpart)
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1257  140  184   90    3
-##          B  289  462  203  185    0
-##          C   39  109  855   23    0
-##          D   41  165  276  482    0
-##          E   13  269  242   53  505
+##          A 1517   27  127    0    3
+##          B  483  369  287    0    0
+##          C  496   30  500    0    0
+##          D  433  171  360    0    0
+##          E  150  153  274    0  505
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.6051          
-##                  95% CI : (0.5925, 0.6176)
-##     No Information Rate : 0.2991          
-##     P-Value [Acc > NIR] : < 2.2e-16       
+##                Accuracy : 0.4912          
+##                  95% CI : (0.4784, 0.5041)
+##     No Information Rate : 0.5232          
+##     P-Value [Acc > NIR] : 1               
 ##                                           
-##                   Kappa : 0.5013          
-##  Mcnemar's Test P-Value : < 2.2e-16       
+##                   Kappa : 0.3348          
+## Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.7669   0.4035   0.4858   0.5786  0.99409
-## Specificity            0.9018   0.8572   0.9585   0.9046  0.89269
-## Pos Pred Value         0.7509   0.4056   0.8333   0.5000  0.46673
-## Neg Pred Value         0.9093   0.8561   0.8137   0.9287  0.99938
-## Prevalence             0.2785   0.1946   0.2991   0.1415  0.08632
-## Detection Rate         0.2136   0.0785   0.1453   0.0819  0.08581
-## Detection Prevalence   0.2845   0.1935   0.1743   0.1638  0.18386
-## Balanced Accuracy      0.8344   0.6303   0.7222   0.7416  0.94339
+## Sensitivity            0.4927   0.4920  0.32300       NA  0.99409
+## Specificity            0.9440   0.8500  0.87872   0.8362  0.89269
+## Pos Pred Value         0.9062   0.3240  0.48733       NA  0.46673
+## Neg Pred Value         0.6291   0.9197  0.78432       NA  0.99938
+## Prevalence             0.5232   0.1274  0.26304   0.0000  0.08632
+## Detection Rate         0.2578   0.0627  0.08496   0.0000  0.08581
+## Detection Prevalence   0.2845   0.1935  0.17434   0.1638  0.18386
+## Balanced Accuracy      0.7184   0.6710  0.60086       NA  0.94339
 ```
-from the confusion matrix, the accuracy is 0.6051, which is not good enough.
+From the confusion matrix, the accuracy is 0.4912, which is not good enough.
 ### Random Forest
 Now we apply random forest.
 ```
@@ -152,33 +152,34 @@ The results are:
 ##           Reference
 ## Prediction    A    B    C    D    E
 ##          A 1674    0    0    0    0
-##          B    1 1138    0    0    0
-##          C    0    0 1025    1    0
-##          D    0    0    2  959    3
-##          E    0    0    0    0 1082
+##          B    6 1133    0    0    0
+##          C    0    2 1024    0    0
+##          D    0    0    6  956    2
+##          E    0    0    0    5 1077
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.9988          
-##                  95% CI : (0.9976, 0.9995)
-##     No Information Rate : 0.2846          
+##                Accuracy : 0.9964          
+##                  95% CI : (0.9946, 0.9978)
+##     No Information Rate : 0.2855          
 ##     P-Value [Acc > NIR] : < 2.2e-16       
 ##                                           
-##                   Kappa : 0.9985          
+##                   Kappa : 0.9955          
 ##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9994   1.0000   0.9981   0.9990   ## 0.9972
-## Specificity            1.0000   0.9998   0.9998   0.9990   1.0000
-## Pos Pred Value         1.0000   0.9991   0.9990   0.9948   1.0000
-## Neg Pred Value         0.9998   1.0000   0.9996   0.9998   0.9994
-## Prevalence             0.2846   0.1934   0.1745   0.1631   0.1844
-## Detection Rate         0.2845   0.1934   0.1742   0.1630   0.1839
+## Sensitivity            0.9964   0.9982   0.9942   0.9948   0.9981
+## Specificity            1.0000   0.9987   0.9996   0.9984   0.9990
+## Pos Pred Value         1.0000   0.9947   0.9981   0.9917   0.9954
+## Neg Pred Value         0.9986   0.9996   0.9988   0.9990   0.9996
+## Prevalence             0.2855   0.1929   0.1750   0.1633   0.1833
+## Detection Rate         0.2845   0.1925   0.1740   0.1624   0.1830
 ## Detection Prevalence   0.2845   0.1935   0.1743   0.1638   0.1839
-## Balanced Accuracy      0.9997   0.9999   0.9989   0.9990   0.9986
+## Balanced Accuracy      0.9982   0.9985   0.9969   0.9966   0.9986
 ```
+The accuracy is 0.9964.
 ### SVM
 Now apply SVM
 ```
@@ -196,37 +197,41 @@ And the result is
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1665    2    7    0    0
-##          B  114  998   26    0    1
-##          C    0   47  967   12    0
-##          D    0    0   73  888    3
-##          E    0    0    4   27 1051
+##          A 1651    5   15    0    3
+##          B  104  999   29    2    5
+##          C    3   44  970    8    1
+##          D    2    0   93  868    1
+##          E    0    8   14   18 1042
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.9463          
-##                  95% CI : (0.9402, 0.9519)
-##     No Information Rate : 0.3023          
+##                Accuracy : 0.9397          
+##                  95% CI : (0.9333, 0.9456)
+##     No Information Rate : 0.2991          
 ##     P-Value [Acc > NIR] : < 2.2e-16       
 ##                                           
-##                   Kappa : 0.9319          
-## Mcnemar's Test P-Value : NA              
+##                   Kappa : 0.9236          
+##  Mcnemar's Test P-Value : < 2.2e-16       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9359   0.9532   0.8979   0.9579   0.9962
-## Specificity            0.9978   0.9709   0.9877   0.9847   0.9936
-## Pos Pred Value         0.9946   0.8762   0.9425   0.9212   0.9713
-## Neg Pred Value         0.9729   0.9897   0.9774   0.9921   0.9992
-## Prevalence             0.3023   0.1779   0.1830   0.1575   0.1793
-## Detection Rate         0.2829   0.1696   0.1643   0.1509   0.1786
+## Sensitivity            0.9381   0.9460   0.8653   0.9688   0.9905
+## Specificity            0.9944   0.9710   0.9882   0.9808   0.9917
+## Pos Pred Value         0.9863   0.8771   0.9454   0.9004   0.9630
+## Neg Pred Value         0.9741   0.9880   0.9689   0.9943   0.9979
+## Prevalence             0.2991   0.1794   0.1905   0.1523   0.1788
+## Detection Rate         0.2805   0.1698   0.1648   0.1475   0.1771
 ## Detection Prevalence   0.2845   0.1935   0.1743   0.1638   0.1839
-## Balanced Accuracy      0.9669   0.9620   0.9428   0.9713   0.9949
+## Balanced Accuracy      0.9662   0.9585   0.9268   0.9748   0.9911
 ```
-The accuracy is 0.9463.
+The accuracy is 0.9397.
 ## Prediction 
 Among the three algorithms applied, random forest has the highest accuracy. Therefore, we use random forest to do the prediction.
 ```
 pred_test <- predict(mod_rf,tsData)
+```
+```
+##  [1] B A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E
 ```
